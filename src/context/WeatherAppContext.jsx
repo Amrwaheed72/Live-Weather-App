@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 const WeatherAppContext = createContext();
 
 function WeatherAppProvider({ children }) {
-  const [city, setCity] = useState("cairo");
+  const [city, setCity] = useState("Zagazig");
   const [inputValue, setInputValue] = useState("");
 
   const { weatherinfo, isPending, error } = useWeather(city);

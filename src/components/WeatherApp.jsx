@@ -4,6 +4,7 @@ import Weather from "./Weather";
 import WeatherData from "./WeatherData";
 import { useWeatherApp } from "../context/weatherAppContext";
 import Spinner from "../ui/Spinner";
+import Logo from "../Logo";
 
 const Container = styled.div`
   width: 100%;
@@ -38,11 +39,25 @@ const StyledDate = styled.div`
 function WeatherApp() {
   const { weatherinfo, isPending } = useWeatherApp();
   if (isPending) return <Spinner />;
+  if (!weatherinfo) return <p>no Weather data</p>;
   function getFormattedDate() {
     const date = new Date();
     const options = { weekday: "short", day: "2-digit", month: "short" };
     return date.toLocaleDateString("en-US", options);
   }
+
+  const logoImages = {
+    Clear: "/public/amrorange.jpg",
+    Clouds: "/public/amrblue.jpg",
+    Rain:  "/public/amrblue.jpg",
+    Snow:  "/public/amrblue.jpg",
+    Haze:  "/public/amrblue.jpg",
+    Mist:  "/public/amrblue.jpg",
+  };
+  const logoImage = weatherinfo.weather
+    ? logoImages[weatherinfo?.weather[0]?.main]
+    : "/public/amrorange.jpg";
+
 
   const backgroundImages = {
     Clear: "linear-gradient(to right, #f3b07c, #fcb2a3)",
@@ -53,10 +68,11 @@ function WeatherApp() {
     Mist: "linear-gradient(to right, #57d6d4, #71eeec)",
   };
   const backgroundImage = weatherinfo.weather
-    ? backgroundImages[weatherinfo.weather[0].main]
+    ? backgroundImages[weatherinfo?.weather[0]?.main]
     : "linear-gradient(to right, #f3b07c, #fcb2a3)";
   return (
     <Container style={{ backgroundImage }}>
+      <Logo logoImage={logoImage} />
       <StyledWeatherApp style={{ backgroundImage }}>
         <SearchContainer />
         <Weather />
