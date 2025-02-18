@@ -1,6 +1,8 @@
 import { ImDroplet } from "react-icons/im";
 import { TbBrandTailwind } from "react-icons/tb";
 import styled from "styled-components";
+import Spinner from "../ui/Spinner";
+import { useWeatherApp } from "../context/weatherAppContext";
 const StyledWeatherData = styled.div`
   width: 100%;
   position: absolute;
@@ -43,17 +45,26 @@ const Windicon = styled(TbBrandTailwind)`
 `;
 
 function WeatherData() {
+  const { weatherinfo, isPending } = useWeatherApp();
+
+  if (isPending) return <Spinner />;
+  if (!weatherinfo) return <p>no Weather Data</p>;
+
+  const {
+    main: { humidity },
+    wind: { speed },
+  } = weatherinfo;
   return (
     <StyledWeatherData>
       <HumidtyContainer>
-        <div className="name">Humdity</div>
+        <div className="name">Humidity</div>
         <DropLetIcon className="icon" />
-        <HumidtyData>33%</HumidtyData>
+        <HumidtyData>{humidity}%</HumidtyData>
       </HumidtyContainer>
       <WindContainer>
         <div className="name">Wind Speed</div>
         <Windicon className="icon" />
-        <WindData>3KM/H</WindData>
+        <WindData>{speed}KM/H</WindData>
       </WindContainer>
     </StyledWeatherData>
   );

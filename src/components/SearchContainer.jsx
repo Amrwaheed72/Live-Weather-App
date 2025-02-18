@@ -1,6 +1,10 @@
 import { CiLocationOn } from "react-icons/ci";
 import { IoSearchOutline } from "react-icons/io5";
 import styled from "styled-components";
+import Spinner from "../ui/Spinner";
+import countries from "i18n-iso-countries";
+import enLocale from "i18n-iso-countries/langs/en.json";
+import { useWeatherApp } from "../context/weatherAppContext";
 
 const StyledSearchContainer = styled.div`
   display: flex;
@@ -54,22 +58,51 @@ const LocationIcon = styled(CiLocationOn)`
 `;
 
 function SearchContainer() {
+  const { onSearch, inputValue, setInputValue, weatherinfo, isPending } =
+    useWeatherApp();
+  if (isPending) return <Spinner />;
+  if (!weatherinfo) return <p>no Weather Data</p>;
+  const {
+    name,
+    sys: { country },
+  } = weatherinfo;
+
+  countries.registerLocale(enLocale);
+  const countryCode = country;
+  const countryName = countries.getName(countryCode, "en"); //to get the name of the country
+
+  function handleSearch(e) {
+    e.preventDefault();
+    if (!inputValue.trim()) return;
+    onSearch(inputValue.trim());
+    setInputValue("");
+  }
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+      if (!inputValue.trim()) return;
+      onSearch(inputValue.trim());
+      setInputValue("");
+    }
+  }
+
   return (
     <StyledSearchContainer>
       <StyledSearchTop>
         <LocationIcon />
-        {/* <IoLocationSharp /> */}
-        <StyledLocation>Abu Hammad</StyledLocation>
+        <StyledLocation>{name} || </StyledLocation>
+        <StyledLocation>{countryName}</StyledLocation>
       </StyledSearchTop>
       <StyledSearchBar>
         <StyledInput
-          type="text"
-          placeholder="Enter your location...."
-        ></StyledInput>
-        <SearchIcon />
+          autoFocus
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Enter your location..."
+          onKeyDown={handleKeyDown}
+        />
+        <SearchIcon onClick={handleSearch} />
       </StyledSearchBar>
     </StyledSearchContainer>
   );
 }
-
 export default SearchContainer;

@@ -2,6 +2,8 @@ import styled from "styled-components";
 import SearchContainer from "./SearchContainer";
 import Weather from "./Weather";
 import WeatherData from "./WeatherData";
+import { useWeatherApp } from "../context/weatherAppContext";
+import Spinner from "../ui/Spinner";
 
 const Container = styled.div`
   width: 100%;
@@ -24,7 +26,7 @@ const StyledWeatherApp = styled.div`
   box-shadow: -3rem 1rem 6rem rgba(0, 0, 0, 0.1);
   position: relative;
 `;
-const Date = styled.div`
+const StyledDate = styled.div`
   position: absolute;
   bottom: 23%;
   > p {
@@ -34,14 +36,33 @@ const Date = styled.div`
 `;
 
 function WeatherApp() {
+  const { weatherinfo, isPending } = useWeatherApp();
+  if (isPending) return <Spinner />;
+  function getFormattedDate() {
+    const date = new Date();
+    const options = { weekday: "short", day: "2-digit", month: "short" };
+    return date.toLocaleDateString("en-US", options);
+  }
+
+  const backgroundImages = {
+    Clear: "linear-gradient(to right, #f3b07c, #fcb2a3)",
+    Clouds: "linear-gradient(to right, #57d6d4, #71eeec)",
+    Rain: "linear-gradient(to right, #5bc8fb, #80eaff)",
+    Snow: "linear-gradient(to right, #aff2ff, #fff)",
+    Haze: "linear-gradient(to right, #57d6d4, #71eeec)",
+    Mist: "linear-gradient(to right, #57d6d4, #71eeec)",
+  };
+  const backgroundImage = weatherinfo.weather
+    ? backgroundImages[weatherinfo.weather[0].main]
+    : "linear-gradient(to right, #f3b07c, #fcb2a3)";
   return (
-    <Container>
-      <StyledWeatherApp>
+    <Container style={{ backgroundImage }}>
+      <StyledWeatherApp style={{ backgroundImage }}>
         <SearchContainer />
         <Weather />
-        <Date>
-          <p>Mon , 17 Feb</p>
-        </Date>
+        <StyledDate>
+          <p>{getFormattedDate()}</p>
+        </StyledDate>
         <WeatherData />
       </StyledWeatherApp>
     </Container>
