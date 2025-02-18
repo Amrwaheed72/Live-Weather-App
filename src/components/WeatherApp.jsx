@@ -5,7 +5,8 @@ import WeatherData from "./WeatherData";
 import { useWeatherApp } from "../context/weatherAppContext";
 import Spinner from "../ui/Spinner";
 import Logo from "../Logo";
-
+import amrblue from "/amrblue.jpg";
+import amrorange from "/amrorange.jpg";
 const Container = styled.div`
   width: 100%;
   height: 100vh;
@@ -47,17 +48,16 @@ function WeatherApp() {
   }
 
   const logoImages = {
-    Clear: "/public/amrorange.jpg",
-    Clouds: "/public/amrblue.jpg",
-    Rain:  "/public/amrblue.jpg",
-    Snow:  "/public/amrblue.jpg",
-    Haze:  "/public/amrblue.jpg",
-    Mist:  "/public/amrblue.jpg",
+    Clear: amrorange,
+    Clouds: amrblue,
+    Rain: amrblue,
+    Snow: amrblue,
+    Haze: amrblue,
+    Mist: amrblue,
   };
   const logoImage = weatherinfo.weather
     ? logoImages[weatherinfo?.weather[0]?.main]
-    : "/public/amrorange.jpg";
-
+    : amrorange;
 
   const backgroundImages = {
     Clear: "linear-gradient(to right, #f3b07c, #fcb2a3)",
