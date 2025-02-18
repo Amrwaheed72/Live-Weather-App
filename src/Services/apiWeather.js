@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 
 export async function fetchWeather(city) {
     const API_KEY = "b0c056d3d14875fbd14f9f02f2001d25";
