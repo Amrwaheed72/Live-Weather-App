@@ -9,6 +9,9 @@ const Img = styled.img`
   /* position: absolute; */
   /* top: 1rem;
     left: 1rem; */
+    @media (max-width:700px ) {
+      display: none;
+    }
 `;
 function Logo({ logoImage }) {
   // const LogoContainer=styled.div`
